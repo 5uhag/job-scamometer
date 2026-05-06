@@ -34,7 +34,7 @@ fileInput.addEventListener('change', () => {
 // Analyse PDF
 document.getElementById('analyse-pdf-btn').addEventListener('click', async () => {
   const file = fileInput.files[0];
-  if (!file) { alert('Please select a PDF file first.'); return; }
+  if (!file) { showError('Please select a PDF file first.'); return; }
   const fd = new FormData();
   fd.append('file', file);
   await analyse(fd, 'pdf', 'analyse-pdf-btn');
@@ -43,7 +43,7 @@ document.getElementById('analyse-pdf-btn').addEventListener('click', async () =>
 // Analyse text
 document.getElementById('analyse-text-btn').addEventListener('click', async () => {
   const text = document.getElementById('offer-text').value.trim();
-  if (!text) { alert('Please paste some text first.'); return; }
+  if (!text) { showError('Please paste some text first.'); return; }
   const fd = new FormData();
   fd.append('text', text);
   await analyse(fd, 'text', 'analyse-text-btn');
@@ -59,28 +59,28 @@ async function analyse(formData, endpoint, btnId) {
     if (!res.ok) throw new Error(`Server error: ${res.status}`);
     const data = await res.json();
     renderResult(data);
-    document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (err) {
-    alert('Could not reach the API. Is the backend running?\n\n' + err.message);
+    showError('Could not reach the API. Is the backend running?\n\n' + err.message);
   } finally {
     btn.disabled = false;
-    btn.innerHTML = endpoint === 'pdf' ? 'Analyse PDF' : 'Analyse Text';
+    btn.innerHTML = endpoint === 'pdf'
+      ? '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Analyse PDF'
+      : '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Analyse Text';
   }
 }
 
 function renderResult(data) {
   const el = document.getElementById('result');
-
   const colorClass = data.color === 'green' ? 'green' : data.color === 'amber' ? 'amber' : 'red';
-  const scoreWidth = data.score + '%';
 
   const redCards = data.red_flags.length
     ? data.red_flags.map(f => flagCard(f, 'red')).join('')
-    : '<p class="no-flags">No red flags detected.</p>';
+    : '<p class="no-flags">No red flags detected — good sign.</p>';
 
   const greenCards = data.green_flags.length
     ? data.green_flags.map(f => flagCard(f, 'green')).join('')
-    : '<p class="no-flags">No green flags detected.</p>';
+    : '<p class="no-flags">No green flags detected — letter lacks trust signals.</p>';
 
   el.innerHTML = `
     <div class="verdict-card ${colorClass}">
@@ -89,21 +89,30 @@ function renderResult(data) {
       <div class="score-bar-wrap">
         <div class="score-label"><span>0 — Scam</span><span>100 — Genuine</span></div>
         <div class="score-track">
-          <div class="score-fill" style="width:${scoreWidth}"></div>
+          <div class="score-fill" style="width:0%"></div>
         </div>
       </div>
     </div>
-
-    <div class="flags-section" style="margin-bottom:1.5rem">
-      <h2>🚩 Red Flags (${data.red_flags.length})</h2>
+    <div class="result-flags">
+      <div class="flags-heading">
+        <span>Red Flags</span>
+        <span class="flag-count">${data.red_flags.length}</span>
+      </div>
       ${redCards}
-    </div>
-
-    <div class="flags-section">
-      <h2>✅ Green Flags (${data.green_flags.length})</h2>
+      <div class="flags-heading">
+        <span>Green Flags</span>
+        <span class="flag-count">${data.green_flags.length}</span>
+      </div>
       ${greenCards}
     </div>
   `;
+
+  // Animate score bar after paint
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      el.querySelector('.score-fill').style.width = data.score + '%';
+    });
+  });
 }
 
 function flagCard(flag, type) {
@@ -118,4 +127,8 @@ function flagCard(flag, type) {
         <p>${flag.message}</p>
       </div>
     </div>`;
+}
+
+function showError(msg) {
+  alert(msg);
 }
