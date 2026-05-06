@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Scamometer — Detect Fake Offer Letters</title>
+  <meta name="description" content="Paste or upload an offer letter. Get an instant red/green flag breakdown with a 0–100 legitimacy score." />
+  <meta property="og:title" content="Job Scamometer" />
+  <meta property="og:description" content="Detect fake job offer letters instantly. Free, open source." />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <h1>🔍 Job Scamometer</h1>
+  <p>Paste or upload a job offer letter — get an instant legitimacy score with red &amp; green flags.</p>
+</header>
+
+<div class="container">
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="tab-pdf">📄 Upload PDF</button>
+    <button class="tab-btn" data-tab="tab-text">📋 Paste Text</button>
+  </div>
+
+  <!-- PDF Panel -->
+  <div id="tab-pdf" class="tab-panel active">
+    <div id="drop-zone" class="drop-zone">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M12 16v-8m0 0-3 3m3-3 3 3M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1" />
+      </svg>
+      <p><strong>Drag &amp; drop a PDF here</strong></p>
+      <p>or click to browse</p>
+      <div id="file-name"></div>
+    </div>
+    <input type="file" id="file-input" accept="application/pdf" />
+    <button class="btn" id="analyse-pdf-btn">Analyse PDF</button>
+  </div>
+
+  <!-- Text Panel -->
+  <div id="tab-text" class="tab-panel">
+    <textarea id="offer-text" placeholder="Paste the full text of the offer letter here…"></textarea>
+    <button class="btn" id="analyse-text-btn">Analyse Text</button>
+  </div>
+
+  <!-- Result -->
+  <div id="result"></div>
+
+</div>
+
+<footer>
+  <p>
+    Open source · Apache 2.0 ·
+    <a href="https://github.com/5uhag/job-scamometer" target="_blank" rel="noopener">GitHub</a>
+    · This tool is for awareness only and does not constitute legal advice.
+    Always verify directly with the employer.
+  </p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
