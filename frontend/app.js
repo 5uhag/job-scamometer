@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8000'; // Replace with your Render URL after deploy
+const API_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost' ? 'http://localhost:8000' : '';
 
 // Tab switching
 document.querySelectorAll('.tab-btn').forEach(btn => {

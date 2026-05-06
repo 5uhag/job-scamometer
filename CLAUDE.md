@@ -78,9 +78,7 @@ Stateless two-tier app — no database, everything computed per request.
 - **`.github/ISSUE_TEMPLATE.md`** for community scam pattern submissions
 
 ### Not Done Yet ❌
-- **LICENSE file** — Apache 2.0 (plan says to add; GitHub can auto-generate it)
-- **`/docs` folder** — frontend must be copied here for GitHub Pages (currently in `/frontend`)
-- **`API_URL` update** in `app.js:1` — still points to localhost; needs the live Render URL after deploy
+- **`API_URL` update** in `app.js:1` — auto-switches between localhost and Vercel; no manual edit needed
 - **Share result** — shareable URL with score encoded as query param
 - **OG image** — `og:image` meta tag missing from `index.html` (og:title and og:description are there)
 - **PWA** — `manifest.json` + service worker (phone install support)
@@ -88,16 +86,17 @@ Stateless two-tier app — no database, everything computed per request.
 - **`patterns.json`** — community-contributed pattern database (currently rules are hardcoded in `rules.py`)
 - **Flag submission form** — link to Google Form in footer
 
-## Deployment
+## Deployment — Vercel (frontend + backend, single platform)
 
-**Backend (Render.com free tier):**
-1. Push repo to GitHub
-2. Render → New Web Service → Root: `backend/`
-3. Build: `pip install -r requirements.txt`
-4. Start: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-5. Copy Render URL → paste into `frontend/app.js` line 1 as `API_URL`
+`vercel.json` routes `/analyse/*` to `api/index.py` (FastAPI serverless) and everything else to `frontend/`. No separate services needed.
 
-**Frontend (GitHub Pages):**
-1. Copy `frontend/` contents into `/docs` at repo root
-2. Settings → Pages → Source: `main` branch, `/docs` folder
-3. Live at `https://5uhag.github.io/job-scamometer`
+**`api/index.py`** — thin entry point that adds `backend/` to `sys.path` and imports `app` from `main.py`. FastAPI routes stay unchanged (`/analyse/text`, `/analyse/pdf`).
+
+**`API_URL` in `app.js:1`** — auto-detects: empty string `''` on Vercel (relative URLs), `http://localhost:8000` on localhost.
+
+**Deploy:**
+```bash
+npm i -g vercel   # one-time
+vercel --prod     # from repo root
+```
+Or connect the GitHub repo on vercel.com → auto-deploys on every push to `main`.
