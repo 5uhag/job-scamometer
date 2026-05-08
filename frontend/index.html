@@ -4,34 +4,109 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Job Scamometer — Detect Fake Job Offer Letters Instantly</title>
-  <meta name="description" content="Paste or upload a job offer letter and get an instant 0–100 legitimacy score with a detailed red & green flag breakdown. Free, open source, built for India." />
+  <meta name="description" content="Paste or upload a job offer letter and get an instant 0–100 legitimacy score with a detailed red &amp; green flag breakdown. Free, open source, built for India." />
   <meta property="og:title" content="Job Scamometer — Detect Fake Offer Letters" />
-  <meta property="og:description" content="Paste or upload a job offer letter. Get an instant legitimacy score with red & green flags. Free and open source." />
+  <meta property="og:description" content="Paste or upload a job offer letter. Get an instant legitimacy score with red &amp; green flags. Free and open source." />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+<!-- Nav -->
+<nav class="site-nav" id="site-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <svg class="logo-icon" width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L3 7v5c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7L12 2z" fill="rgba(249,115,22,0.18)" stroke="#F97316" stroke-width="1.5"/>
+        <path d="M12 8v4M12 16h.01" stroke="#F97316" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="logo-text">Job Scamometer</span>
+    </a>
+    <div class="nav-links">
+      <a href="#analyser" class="nav-link">Analyse</a>
+      <a href="#how" class="nav-link">How it works</a>
+      <a href="https://github.com/5uhag/job-scamometer" target="_blank" rel="noopener" class="nav-link">GitHub</a>
+    </div>
+    <div id="nav-auth-area" class="nav-auth-area"></div>
+  </div>
+</nav>
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" id="modal-close" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="modal-header">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" style="margin-bottom:0.75rem">
+        <path d="M12 2L3 7v5c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7L12 2z" fill="rgba(249,115,22,0.18)" stroke="#F97316" stroke-width="1.5"/>
+        <path d="M12 8v4M12 16h.01" stroke="#F97316" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <h2 class="modal-title" id="modal-title">Welcome back</h2>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" data-form="signin">Sign In</button>
+      <button class="modal-tab" data-form="signup">Sign Up</button>
+    </div>
+    <form id="signin-form" class="modal-form active" novalidate>
+      <div class="auth-error" id="signin-error" role="alert"></div>
+      <div class="form-group">
+        <label for="si-email">Email address</label>
+        <input type="email" id="si-email" placeholder="you@company.com" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label for="si-password">Password</label>
+        <input type="password" id="si-password" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <button type="submit" class="auth-submit-btn">Sign In</button>
+      <p class="auth-switch">No account? <button type="button" class="link-btn" data-form="signup">Sign up free</button></p>
+    </form>
+    <form id="signup-form" class="modal-form" novalidate>
+      <div class="auth-error" id="signup-error" role="alert"></div>
+      <div class="form-group">
+        <label for="su-name">Full name</label>
+        <input type="text" id="su-name" placeholder="Rahul Sharma" autocomplete="name" />
+      </div>
+      <div class="form-group">
+        <label for="su-email">Email address</label>
+        <input type="email" id="su-email" placeholder="you@company.com" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label for="su-password">Password</label>
+        <input type="password" id="su-password" placeholder="Min. 6 characters" autocomplete="new-password" />
+      </div>
+      <button type="submit" class="auth-submit-btn">Create Account</button>
+      <p class="auth-switch">Already have an account? <button type="button" class="link-btn" data-form="signin">Sign in</button></p>
+    </form>
+  </div>
+</div>
+
 <!-- Hero -->
 <section class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow-top"></div>
+  <div class="hero-glow-br"></div>
   <div class="hero-inner">
     <div class="badge-row">
       <span class="badge">Free &amp; Open Source</span>
-      <span class="badge">No Signup Required</span>
+      <span class="badge badge-accent">18 Detection Signals</span>
       <span class="badge">Made in India</span>
     </div>
-    <h1>Is your job offer <span class="gradient-text">real or a scam?</span></h1>
-    <p class="hero-sub">Paste or upload any offer letter. Our rule-based engine checks 18 signals in under a second and gives you a 0–100 legitimacy score — no AI black box, fully explainable.</p>
+    <h1>Is your job offer<br><span class="gradient-text">real or a scam?</span></h1>
+    <p class="hero-sub">Upload any offer letter. Our transparent rule engine checks 18 signals instantly and returns an explainable 0–100 legitimacy score — no AI black box.</p>
+    <div class="hero-actions">
+      <a href="#analyser" class="btn-hero-primary">Analyse Now</a>
+      <a href="#how" class="btn-hero-ghost">How it works</a>
+    </div>
     <div class="stat-row">
-      <div class="stat"><span class="stat-num">65,000+</span><span class="stat-label">job fraud cases in India (2023)</span></div>
+      <div class="stat"><span class="stat-num">65K+</span><span class="stat-label">Job fraud cases in India (2023)</span></div>
       <div class="stat-div"></div>
-      <div class="stat"><span class="stat-num">18</span><span class="stat-label">detection signals</span></div>
+      <div class="stat"><span class="stat-num">18</span><span class="stat-label">Detection signals</span></div>
       <div class="stat-div"></div>
-      <div class="stat"><span class="stat-num">&lt;1s</span><span class="stat-label">analysis time</span></div>
+      <div class="stat"><span class="stat-num">&lt;1s</span><span class="stat-label">Analysis time</span></div>
     </div>
   </div>
 </section>
@@ -39,28 +114,25 @@
 <!-- Analyser -->
 <section class="analyser-section" id="analyser">
   <div class="container">
-
     <div class="analyser-card">
       <div class="analyser-header">
         <h2>Analyse your offer letter</h2>
-        <p>Upload a PDF or paste the text — we'll do the rest.</p>
+        <p>Upload a PDF or paste the text — results appear instantly below.</p>
       </div>
-
       <div class="tabs">
         <button class="tab-btn active" data-tab="tab-pdf">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           Upload PDF
         </button>
         <button class="tab-btn" data-tab="tab-text">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
           Paste Text
         </button>
       </div>
-
       <div id="tab-pdf" class="tab-panel active">
         <div id="drop-zone" class="drop-zone">
           <div class="drop-icon">
-            <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           </div>
           <p class="drop-title">Drop your PDF here</p>
           <p class="drop-sub">or click to browse &nbsp;·&nbsp; PDF only</p>
@@ -68,32 +140,28 @@
         </div>
         <input type="file" id="file-input" accept="application/pdf" />
         <button class="btn" id="analyse-pdf-btn">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           Analyse PDF
         </button>
       </div>
-
       <div id="tab-text" class="tab-panel">
         <textarea id="offer-text" placeholder="Paste the full text of the offer letter here…&#10;&#10;Tip: include everything — email sender, company address, salary details, and signature block."></textarea>
         <button class="btn" id="analyse-text-btn">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           Analyse Text
         </button>
       </div>
-
       <div id="result"></div>
     </div>
-
   </div>
 </section>
 
 <!-- How it works -->
-<section class="how-section">
+<section class="how-section" id="how">
   <div class="container">
     <div class="section-label">How it works</div>
     <h2 class="section-title">Rule-based, not a black box</h2>
     <p class="section-sub">Every decision is explainable. No machine learning guesswork — just transparent regex rules you can read on GitHub.</p>
-
     <div class="steps">
       <div class="step">
         <div class="step-num">01</div>
@@ -116,54 +184,49 @@
   </div>
 </section>
 
-<!-- What we check -->
+<!-- Detection signals -->
 <section class="checks-section">
   <div class="container">
     <div class="section-label">Detection signals</div>
     <h2 class="section-title">What the engine looks for</h2>
-
     <div class="checks-grid">
-      <div class="checks-col red-col">
+      <div class="checks-col">
         <div class="checks-col-header red-header">
-          <span class="col-dot red-dot"></span>
-          Red Flags — raise the risk score
+          <span class="col-dot red-dot"></span>Red Flags — raise the risk score
         </div>
         <ul class="check-list">
-          <li><span class="weight red-weight">40pts</span> Upfront payment demand (deposit, training fee, courier)</li>
-          <li><span class="weight red-weight">25pts</span> Offer sent from Gmail / Yahoo / personal email</li>
-          <li><span class="weight red-weight">20pts</span> Unrealistic salary structure (per-day/hour pay)</li>
-          <li><span class="weight red-weight">20pts</span> Requests sensitive documents before onboarding</li>
-          <li><span class="weight red-weight">15pts</span> No physical company address found</li>
-          <li><span class="weight red-weight">15pts</span> CIN / GST registration number missing</li>
-          <li><span class="weight red-weight">15pts</span> Work-from-home + suspiciously high salary combo</li>
-          <li><span class="weight red-weight">10pts</span> Urgency language ("reply in 24 hours", "last chance")</li>
-          <li><span class="weight red-weight">10pts</span> No HR name or designation in the letter</li>
-          <li><span class="weight red-weight">10pts</span> Multiple spelling / grammar errors</li>
+          <li><span class="weight red-weight">40</span> Upfront payment demand (deposit, training fee, courier)</li>
+          <li><span class="weight red-weight">25</span> Offer sent from Gmail / Yahoo / personal email</li>
+          <li><span class="weight red-weight">20</span> Unrealistic salary structure (per-day/hour pay)</li>
+          <li><span class="weight red-weight">20</span> Requests sensitive documents before onboarding</li>
+          <li><span class="weight red-weight">15</span> No physical company address found</li>
+          <li><span class="weight red-weight">15</span> CIN / GST registration number missing</li>
+          <li><span class="weight red-weight">15</span> Work-from-home + suspiciously high salary combo</li>
+          <li><span class="weight red-weight">10</span> Urgency language ("reply in 24 hours", "last chance")</li>
+          <li><span class="weight red-weight">10</span> No HR name or designation in the letter</li>
+          <li><span class="weight red-weight">10</span> Multiple spelling / grammar errors</li>
         </ul>
       </div>
-
-      <div class="checks-col green-col">
+      <div class="checks-col">
         <div class="checks-col-header green-header">
-          <span class="col-dot green-dot"></span>
-          Green Flags — lower the risk score
+          <span class="col-dot green-dot"></span>Green Flags — lower the risk score
         </div>
         <ul class="check-list">
-          <li><span class="weight green-weight">20pts</span> Email from a verified corporate domain</li>
-          <li><span class="weight green-weight">20pts</span> CIN number present (verifiable on MCA portal)</li>
-          <li><span class="weight green-weight">10pts</span> Specific joining date mentioned</li>
-          <li><span class="weight green-weight">10pts</span> Named Indian city / office location</li>
-          <li><span class="weight green-weight">10pts</span> Probation period or notice period stated</li>
-          <li><span class="weight green-weight">10pts</span> Job designation clearly labelled</li>
-          <li><span class="weight green-weight">10pts</span> PF, ESI, gratuity, or CTC breakdown present</li>
-          <li><span class="weight green-weight">10pts</span> Signed by a named authority or director</li>
+          <li><span class="weight green-weight">20</span> Email from a verified corporate domain</li>
+          <li><span class="weight green-weight">20</span> CIN number present (verifiable on MCA portal)</li>
+          <li><span class="weight green-weight">10</span> Specific joining date mentioned</li>
+          <li><span class="weight green-weight">10</span> Named Indian city / office location</li>
+          <li><span class="weight green-weight">10</span> Probation period or notice period stated</li>
+          <li><span class="weight green-weight">10</span> Job designation clearly labelled</li>
+          <li><span class="weight green-weight">10</span> PF, ESI, gratuity, or CTC breakdown present</li>
+          <li><span class="weight green-weight">10</span> Signed by a named authority or director</li>
         </ul>
       </div>
     </div>
-
     <div class="verdict-key">
-      <div class="vk-item green-vk"><span class="vk-badge">70 – 100</span> Likely Genuine</div>
-      <div class="vk-item amber-vk"><span class="vk-badge">40 – 69</span> Suspicious</div>
-      <div class="vk-item red-vk"><span class="vk-badge">0 – 39</span> High Risk — Possible Scam</div>
+      <div class="vk-item green-vk"><span class="vk-badge">70–100</span> Likely Genuine</div>
+      <div class="vk-item amber-vk"><span class="vk-badge">40–69</span> Suspicious</div>
+      <div class="vk-item red-vk"><span class="vk-badge">0–39</span> High Risk</div>
     </div>
   </div>
 </section>
